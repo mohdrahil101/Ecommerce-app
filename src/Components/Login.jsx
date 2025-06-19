@@ -1,8 +1,8 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 
-function Login() {
+function Login({updateUserDetails}) {
 
   const [formData,setformData] =useState({
     username:"",
@@ -41,10 +41,16 @@ function Login() {
     event.preventDefault();   //prevent default behaviour of HTML of reloading the form 
 
     if(validate()){
-      if(formData.username==='admin' && formData.password==='admin')
-        setMessage("Correct credentials");
-      else 
+      if(formData.username==='admin' && formData.password==='admin'){
+        // Assume we are calling REST endpoint and we are getting additional user details.
+          updateUserDetails({
+            name: 'John Cena',
+            email: 'john@cena.com'
+          })
+      }
+      else{ 
         setMessage("Invalid credentials");
+      }
     }
   }
 
