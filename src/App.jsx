@@ -8,6 +8,8 @@ import {Routes,Route} from 'react-router-dom';
 import AppLayout from './Components/Layout/AppLayout'
 import Dashboard from './Components/Dashboard'
 import { Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import axios from 'axios'
 
 function App() {
   // Tracking user details in App because app is the component which decides where to navigate based on the current route and it needs to know whether the user is logged in or not. 
@@ -16,8 +18,22 @@ function App() {
   // This function takes new value of userDetails and update it using setUserDetails function.
   const updateUserDetails= (updatedData) =>{
     setUserDetails(updatedData);
-    // console.log(updatedData); 
   };
+
+  const isUserLoggedIn = async()=>{
+    try{
+      const response=await axios.post('http://localhost:5001/auth/is-user-logged-in',{},{withCredentials:true});
+      updateUserDetails(response.data.userDetails);
+      console.log(response)
+    }
+    catch(err){
+      console.log('User not logged in', err);
+    }
+  }
+
+  useEffect(()=>{
+    isUserLoggedIn();
+  },[]);
 
   const [count, setCount] = useState(0)
   return (
